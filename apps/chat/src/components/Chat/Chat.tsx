@@ -1,62 +1,3 @@
-import { IconPlayerPlay } from '@tabler/icons-react';
-import {
-  memo,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
-
-import { useRouter } from 'next/router';
-
-import classNames from 'classnames';
-
-import { useResizeObserver } from '@/src/hooks/useResizeObserver';
-import { useTranslation } from '@/src/hooks/useTranslation';
-
-import { clearStateForMessages } from '@/src/utils/app/clear-messages-state';
-import {
-  excludeSystemMessages,
-  getConversationModelParams,
-  isReplayAsIsConversation,
-  isReplayConversation,
-} from '@/src/utils/app/conversation';
-import {
-  isConversationWithFormSchema,
-  isFormSchemaValid,
-} from '@/src/utils/app/form-schema';
-import { isEntityIdExternal } from '@/src/utils/app/id';
-import { is4XLScreen } from '@/src/utils/app/mobile';
-import { doesModelHaveConfiguration } from '@/src/utils/app/models';
-
-import { ApplicationStatus } from '@/src/types/applications';
-import {
-  Conversation,
-  ConversationsTemporarySettings,
-  MergedMessages,
-} from '@/src/types/chat';
-import { EntityType } from '@/src/types/common';
-import { Translation } from '@/src/types/translation';
-
-import { AddonsSelectors } from '@/src/store/addons/addons.selectors';
-import { ApplicationTypesSchemasSelectors } from '@/src/store/applicationTypeSchemas/applicationTypeSchemas.selectors';
-import { ChatActions } from '@/src/store/chat/chat.reducer';
-import { ChatSelectors } from '@/src/store/chat/chat.selectors';
-import { ConversationsActions } from '@/src/store/conversations/conversations.reducers';
-import { ConversationsSelectors } from '@/src/store/conversations/conversations.selectors';
-import { useAppDispatch, useAppSelector } from '@/src/store/hooks';
-import { ModelsSelectors } from '@/src/store/models/models.selectors';
-import { PublicationSelectors } from '@/src/store/publication/publication.selectors';
-import { SettingsSelectors } from '@/src/store/settings/settings.selectors';
-import { UISelectors } from '@/src/store/ui/ui.selectors';
-
-import { Routes } from '@/src/constants/routes';
-
-import { ChatDropArea } from '@/src/components/Chat/ChatDropArea';
-import { ChatStarters } from '@/src/components/Chat/ChatStarters';
-
 import { CustomChatViewer } from '../AppsEditor/Settings/Previews/CustomChatViewer';
 import Loader from '../Common/Loader';
 import { NotFoundEntity } from '../Common/NotFoundEntity';
@@ -76,6 +17,44 @@ import { PublicationControls } from './Publish/PublicationChatControls';
 import { PublicationHandler } from './Publish/PublicationHandler';
 import { TalkToModal } from './TalkTo/TalkToModal';
 
+import { ChatDropArea } from '@/src/components/Chat/ChatDropArea';
+import { ChatStarters } from '@/src/components/Chat/ChatStarters';
+import { Routes } from '@/src/constants/routes';
+import { useResizeObserver } from '@/src/hooks/useResizeObserver';
+import { useTranslation } from '@/src/hooks/useTranslation';
+import { AddonsSelectors } from '@/src/store/addons/addons.selectors';
+import { ApplicationTypesSchemasSelectors } from '@/src/store/applicationTypeSchemas/applicationTypeSchemas.selectors';
+import { ChatActions } from '@/src/store/chat/chat.reducer';
+import { ChatSelectors } from '@/src/store/chat/chat.selectors';
+import { ConversationsActions } from '@/src/store/conversations/conversations.reducers';
+import { ConversationsSelectors } from '@/src/store/conversations/conversations.selectors';
+import { useAppDispatch, useAppSelector } from '@/src/store/hooks';
+import { ModelsSelectors } from '@/src/store/models/models.selectors';
+import { PublicationSelectors } from '@/src/store/publication/publication.selectors';
+import { SettingsSelectors } from '@/src/store/settings/settings.selectors';
+import { UISelectors } from '@/src/store/ui/ui.selectors';
+import { ApplicationStatus } from '@/src/types/applications';
+import {
+  Conversation,
+  ConversationsTemporarySettings,
+  MergedMessages,
+} from '@/src/types/chat';
+import { EntityType } from '@/src/types/common';
+import { Translation } from '@/src/types/translation';
+import { clearStateForMessages } from '@/src/utils/app/clear-messages-state';
+import {
+  excludeSystemMessages,
+  getConversationModelParams,
+  isReplayAsIsConversation,
+  isReplayConversation,
+} from '@/src/utils/app/conversation';
+import {
+  isConversationWithFormSchema,
+  isFormSchemaValid,
+} from '@/src/utils/app/form-schema';
+import { isEntityIdExternal } from '@/src/utils/app/id';
+import { is4XLScreen } from '@/src/utils/app/mobile';
+import { doesModelHaveConfiguration } from '@/src/utils/app/models';
 import {
   Feature,
   LikeState,
@@ -83,7 +62,19 @@ import {
   Role,
   UploadStatus,
 } from '@epam/ai-dial-shared';
+import { IconPlayerPlay } from '@tabler/icons-react';
+import classNames from 'classnames';
 import throttle from 'lodash/throttle';
+import { useRouter } from 'next/router';
+import {
+  memo,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 const scrollThrottlingTimeout = 250;
 
@@ -590,11 +581,12 @@ const ChatView = memo(() => {
   useEffect(() => {
     if (
       !enabledFeatures.has(Feature.SkipFocusChatInputOnLoad) &&
+      !messageIsStreaming &&
       textareaRef.current
     ) {
       textareaRef.current.focus();
     }
-  }, [enabledFeatures]);
+  }, [enabledFeatures, messageIsStreaming]);
 
   return (
     <ChatDropArea isSettingsModalOpen={isShowChatSettings}>
