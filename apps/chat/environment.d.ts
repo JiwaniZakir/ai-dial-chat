@@ -62,6 +62,12 @@ declare global {
       AUTH_AUTH0_NAME?: string;
       AUTH_AUTH0_SECRET?: string;
       AUTH_AUTH0_SCOPE?: string;
+      AUTH_AUTH0_2_AUDIENCE?: string;
+      AUTH_AUTH0_2_CLIENT_ID?: string;
+      AUTH_AUTH0_2_HOST?: string;
+      AUTH_AUTH0_2_NAME?: string;
+      AUTH_AUTH0_2_SECRET?: string;
+      AUTH_AUTH0_2_SCOPE?: string;
       AUTH_AZURE_AD_CLIENT_ID?: string;
       AUTH_AZURE_AD_NAME?: string;
       AUTH_AZURE_AD_SECRET?: string;

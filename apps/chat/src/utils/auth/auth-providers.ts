@@ -103,6 +103,25 @@ const allProviders: (Provider | boolean)[] = [
       token: tokenConfig,
     }),
 
+  !!process.env.AUTH_AUTH0_2_CLIENT_ID &&
+    !!process.env.AUTH_AUTH0_2_SECRET &&
+    !!process.env.AUTH_AUTH0_2_HOST &&
+    Auth0Provider({
+      clientId: process.env.AUTH_AUTH0_2_CLIENT_ID,
+      clientSecret: process.env.AUTH_AUTH0_2_SECRET,
+      name: process.env.AUTH_AUTH0_2_NAME ?? 'Auth0 2',
+      issuer: process.env.AUTH_AUTH0_2_HOST,
+      authorization: {
+        params: {
+          audience: process.env.AUTH_AUTH0_2_AUDIENCE,
+          scope:
+            process.env.AUTH_AUTH0_2_SCOPE ||
+            'openid email profile offline_access',
+        },
+      },
+      token: tokenConfig,
+    }),
+
   !!process.env.AUTH_PING_ID_CLIENT_ID &&
     !!process.env.AUTH_PING_ID_SECRET &&
     !!process.env.AUTH_PING_ID_HOST &&
