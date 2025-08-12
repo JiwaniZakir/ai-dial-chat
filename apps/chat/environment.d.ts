@@ -87,6 +87,11 @@ declare global {
       AUTH_KEYCLOAK_NAME?: string;
       AUTH_KEYCLOAK_SECRET?: string;
       AUTH_KEYCLOAK_SCOPE?: string;
+      AUTH_KEYCLOAK_2_CLIENT_ID?: string;
+      AUTH_KEYCLOAK_2_HOST?: string;
+      AUTH_KEYCLOAK_2_NAME?: string;
+      AUTH_KEYCLOAK_2_SECRET?: string;
+      AUTH_KEYCLOAK_2_SCOPE?: string;
       AUTH_PING_ID_CLIENT_ID?: string;
       AUTH_PING_ID_HOST?: string;
       AUTH_PING_ID_NAME?: string;

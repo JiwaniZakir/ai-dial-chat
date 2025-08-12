@@ -168,6 +168,36 @@ const allProviders: (Provider | boolean)[] = [
       token: tokenConfig,
     }),
 
+  !!process.env.AUTH_KEYCLOAK_2_CLIENT_ID &&
+    !!process.env.AUTH_KEYCLOAK_2_SECRET &&
+    !!process.env.AUTH_KEYCLOAK_2_HOST &&
+    (() => {
+      const provider = KeycloakProvider({
+        clientId: process.env.AUTH_KEYCLOAK_2_CLIENT_ID,
+        clientSecret: process.env.AUTH_KEYCLOAK_2_SECRET,
+        name: process.env.AUTH_KEYCLOAK_2_NAME ?? 'Keycloak 2',
+        issuer: process.env.AUTH_KEYCLOAK_2_HOST,
+        userinfo: {
+          async request(context) {
+            const userinfo = await context.client.userinfo(
+              context.tokens.access_token as string,
+            );
+            return userinfo;
+          },
+        },
+        authorization: {
+          params: {
+            scope:
+              process.env.AUTH_KEYCLOAK_2_SCOPE ||
+              'openid email profile offline_access',
+          },
+        },
+        token: tokenConfig,
+      });
+      provider.id = 'keycloak_2'; // Уникальный ID для второго провайдера
+      return provider;
+    })(),
+
   !!process.env.AUTH_COGNITO_CLIENT_ID &&
     !!process.env.AUTH_COGNITO_SECRET &&
     !!process.env.AUTH_COGNITO_HOST &&
