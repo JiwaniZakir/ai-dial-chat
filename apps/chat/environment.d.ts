@@ -102,6 +102,11 @@ declare global {
       AUTH_COGNITO_HOST?: string;
       AUTH_COGNITO_NAME?: string;
       AUTH_COGNITO_SCOPE?: string;
+      AUTH_COGNITO_2_CLIENT_ID?: string;
+      AUTH_COGNITO_2_SECRET?: string;
+      AUTH_COGNITO_2_HOST?: string;
+      AUTH_COGNITO_2_NAME?: string;
+      AUTH_COGNITO_2_SCOPE?: string;
       AUTH_OKTA_CLIENT_ID?: string;
       AUTH_OKTA_CLIENT_SECRET?: string;
       AUTH_OKTA_ISSUER?: string;

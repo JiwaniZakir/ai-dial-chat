@@ -214,6 +214,26 @@ const allProviders: (Provider | boolean)[] = [
       token: tokenConfig,
     }),
 
+  !!process.env.AUTH_COGNITO_2_CLIENT_ID &&
+    !!process.env.AUTH_COGNITO_2_SECRET &&
+    !!process.env.AUTH_COGNITO_2_HOST &&
+    (() => {
+      const provider = CognitoProvider({
+        clientId: process.env.AUTH_COGNITO_2_CLIENT_ID,
+        clientSecret: process.env.AUTH_COGNITO_2_SECRET,
+        issuer: process.env.AUTH_COGNITO_2_HOST,
+        name: process.env.AUTH_COGNITO_2_NAME ?? 'Cognito 2',
+        authorization: {
+          params: {
+            scope: process.env.AUTH_COGNITO_2_SCOPE || 'openid email profile',
+          },
+        },
+        token: tokenConfig,
+      });
+      provider.id = 'cognito_2'; // Уникальный ID для второго провайдера
+      return provider;
+    })(),
+
   !!process.env.AUTH_OKTA_CLIENT_SECRET &&
     !!process.env.AUTH_OKTA_CLIENT_ID &&
     !!process.env.AUTH_OKTA_ISSUER &&
