@@ -73,6 +73,11 @@ declare global {
       AUTH_AZURE_AD_SECRET?: string;
       AUTH_AZURE_AD_TENANT_ID?: string;
       AUTH_AZURE_AD_SCOPE?: string;
+      AUTH_AZURE_AD_2_CLIENT_ID?: string;
+      AUTH_AZURE_AD_2_NAME?: string;
+      AUTH_AZURE_AD_2_SECRET?: string;
+      AUTH_AZURE_AD_2_TENANT_ID?: string;
+      AUTH_AZURE_AD_2_SCOPE?: string;
       AUTH_GITLAB_CLIENT_ID?: string;
       AUTH_GITLAB_HOST?: string;
       AUTH_GITLAB_NAME?: string;

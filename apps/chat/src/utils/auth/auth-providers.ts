@@ -35,6 +35,28 @@ const allProviders: (Provider | boolean)[] = [
       token: tokenConfig,
     }),
 
+  !!process.env.AUTH_AZURE_AD_2_CLIENT_ID &&
+    !!process.env.AUTH_AZURE_AD_2_SECRET &&
+    !!process.env.AUTH_AZURE_AD_2_TENANT_ID &&
+    (() => {
+      const provider = AzureProvider({
+        clientId: process.env.AUTH_AZURE_AD_2_CLIENT_ID,
+        clientSecret: process.env.AUTH_AZURE_AD_2_SECRET,
+        tenantId: process.env.AUTH_AZURE_AD_2_TENANT_ID,
+        name: process.env.AUTH_AZURE_AD_2_NAME ?? 'Microsoft Entra 2',
+        authorization: {
+          params: {
+            scope:
+              process.env.AUTH_AZURE_AD_2_SCOPE ||
+              'openid profile user.Read email offline_access',
+          },
+        },
+        token: tokenConfig,
+      });
+      provider.id = 'azure-ad_2';
+      return provider;
+    })(),
+
   !!process.env.AUTH_AZURE_B2C_CLIENT_ID &&
     !!process.env.AUTH_AZURE_B2C_CLIENT_SECRET &&
     !!process.env.AUTH_AZURE_B2C_TENANT_ID &&
