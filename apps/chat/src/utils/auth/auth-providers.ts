@@ -270,6 +270,25 @@ const allProviders: (Provider | boolean)[] = [
       },
       token: tokenConfig,
     }),
+
+  !!process.env.AUTH_OKTA_2_CLIENT_SECRET &&
+    !!process.env.AUTH_OKTA_2_CLIENT_ID &&
+    !!process.env.AUTH_OKTA_2_ISSUER &&
+    (() => {
+      const provider = OktaProvider({
+        clientId: process.env.AUTH_OKTA_2_CLIENT_ID,
+        clientSecret: process.env.AUTH_OKTA_2_CLIENT_SECRET,
+        issuer: process.env.AUTH_OKTA_2_ISSUER,
+        authorization: {
+          params: {
+            scope: process.env.AUTH_OKTA_2_SCOPE || 'openid email profile',
+          },
+        },
+        token: tokenConfig,
+      });
+      provider.id = 'okta_2';
+      return provider;
+    })(),
 ];
 
 export const authProviders = allProviders.filter(Boolean) as Provider[];
