@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import { useRouter } from 'next/router';
+
 import {
   UseFileManagerActionLabelsOptions,
   useFileManagerActionLabels,
@@ -65,6 +67,7 @@ export const useFileManager = ({
 }: UseFileManagerOptions = {}) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(Translation.SideBar);
+  const router = useRouter();
 
   const isFileMetadataLoading = useAppSelector(
     FilesSelectors.selectLoadingFileMetadata,
@@ -153,12 +156,31 @@ export const useFileManager = ({
     boolean | undefined
   >(true);
 
-  const { activeTab, handleTabChange, tabs } = useDialFileManagerTabs({
-    my_files: t('My Files'),
-    shared: t('Shared with Me'),
-    organization: t('Organization'),
-  });
+  const tabFromUrl = router.query.tab as DialFileManagerTabs | undefined;
+
+  const { activeTab, handleTabChange, tabs } = useDialFileManagerTabs(
+    {
+      my_files: t('My Files'),
+      shared: t('Shared with Me'),
+      organization: t('Organization'),
+    },
+    tabFromUrl, // Pass initial tab from URL
+  );
   const previousActiveTabRef = useRef<DialFileManagerTabs | null>(null);
+
+  // Update URL when tab changes
+  useEffect(() => {
+    if (activeTab && router.query.tab !== activeTab) {
+      void router.push(
+        {
+          pathname: router.pathname,
+          query: { ...router.query, tab: activeTab },
+        },
+        undefined,
+        { shallow: true },
+      );
+    }
+  }, [activeTab, router]);
 
   const filteredTabs = useMemo(() => {
     if (!availableTabs || !availableTabs.size) {
@@ -556,7 +578,7 @@ export const useFileManager = ({
     () => ({
       tabs: filteredTabs,
       activeTab: activeTab,
-      onTabChange: handleTabChange,
+      onTabChange: handleTabChange, // Use original handleTabChange
       newButtonVariant: ButtonVariant.Primary,
       newActionLabels: newActionLabels,
       ...externalToolbarOptions,
