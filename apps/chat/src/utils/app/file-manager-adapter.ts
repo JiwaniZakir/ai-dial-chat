@@ -155,6 +155,9 @@ export const buildFileTree = (
     files.filter((f) => f.isShared && !f.sharedWithMe).map((f) => f.id),
   );
 
+  console.log(sharedByMePaths, 'sharedByMePaths');
+  console.log(files, 'files');
+
   const sortedFolders = [...folders].sort((a, b) => {
     const depthA = a.id.split('/').length;
     const depthB = b.id.split('/').length;
